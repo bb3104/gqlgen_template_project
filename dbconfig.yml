@@ -1,0 +1,9 @@
+development:
+  dialect: mysql
+  datasource: ${DATABASE_USER}:${DATABASE_PASS}@tcp(${DATABASE_HOST}:${DATABASE_PORT})/${DATABASE_NAME}?parseTime=true
+  dir: internal/orm/migrations
+
+production:
+  dialect: mysql
+  datasource: ${DATABASE_USER}:${DATABASE_PASS}@tcp(${DATABASE_HOST}:${DATABASE_PORT})/${DATABASE_NAME}?parseTime=true
+  dir: internal/orm/migrations

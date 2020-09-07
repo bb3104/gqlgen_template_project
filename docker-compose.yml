@@ -1,0 +1,49 @@
+version: '3'
+services:
+  backend:
+    build: .
+    hostname: backend
+    environment:
+      TZ: Asia/Tokyo
+      DATABASE_USER: user
+      DATABASE_PASS: pass
+      DATABASE_HOST: db-development
+      DATABASE_PORT: 3306
+      FRONTEND_HOST: localhost:3000
+      DATABASE_NAME: gqlgen_template_project_development
+    # env_file: .env
+    volumes:
+      - .:/go/src/github.com/bb3104/gqlgen_template_project
+    ports:
+      - '3001:3000'
+    tty: true
+    stdin_open: true
+    command: "go run cmd/gql_server/main.go"
+    networks:
+      - gqlgen_template_project
+  db-development:
+    image: bitnami/mysql:5.7
+    environment:
+      ALLOW_EMPTY_PASSWORD: 'yes'
+      MYSQL_USER: user
+      MYSQL_PASSWORD: pass
+      MYSQL_DATABASE: gqlgen_template_project_development
+      TZ: Asia/Tokyo
+    ports:
+      - '13306:3306'
+    expose:
+      - '3306'
+    volumes:
+      - gqlgen_template_project-db-development-data:/bitnami/mysql/data
+      - ./mysql/custom.cnf:/opt/bitnami/mysql/conf/my_custom.cnf:ro
+    networks:
+      - gqlgen_template_project
+volumes:
+  gqlgen_template_project-db-development-data:
+    driver: local
+
+networks:
+  gqlgen_template_project:
+    external:
+      name: gqlgen_template_project_network
+
